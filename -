@@ -1,0 +1,7 @@
+GITHUB_ID=9ddd744f076db53a1317
+GITHUB_SECRET=c31f8288bd3eb779d3b6c144364973d8ccaeaed7
+MONGODB_URI=mongodb+srv://dbadmin:maP1HO4JZoxoG5bm@cluster0.zvuk7wj.mongodb.net/newklio?retryWrites=true&w=majority
+
+# next auth keys
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=supersecret
