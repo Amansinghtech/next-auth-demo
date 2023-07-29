@@ -13,9 +13,12 @@ function Login() {
 	const onSubmit = handleSubmit((data) => {
 		signIn('credentials', {
 			...data,
-			redirect: false,
+			redirect: true,
+			callbackUrl: '/dashboard',
 		})
-			.then((res) => console.log(res))
+			.then((res) => {
+				console.log(res)
+			})
 			.catch((err) => console.log(err))
 	})
 
