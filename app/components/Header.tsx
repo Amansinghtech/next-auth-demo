@@ -23,7 +23,12 @@ function Header() {
 						Welcome! {session?.user?.name}
 					</p>
 					<button
-						onClick={() => signOut()}
+						onClick={() =>
+							signOut({
+								redirect: true,
+								callbackUrl: '/login',
+							})
+						}
 						className="bg-neutral-600 hover:bg-primary-600 text-white py-2 px-4 rounded-full hover:bg-neutral-700"
 					>
 						Sign Out

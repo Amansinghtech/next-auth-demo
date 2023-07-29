@@ -10,8 +10,8 @@ function SignUp() {
 		password: string
 	}>()
 
-	const onSubmit = handleSubmit((data) => {
-		const res = fetch('/api/auth/users', {
+	const onSubmit = handleSubmit(async (data) => {
+		const res = await fetch('/api/auth/users', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

@@ -1,4 +1,9 @@
-import NextAuth from 'next-auth'
+import startDb from '@main/app/helper/db'
+import UserModal from '@main/models/users'
+import NextAuth, { User } from 'next-auth'
+import CredentialsProvider, {
+	CredentialInput,
+} from 'next-auth/providers/credentials'
 import GithubProvider from 'next-auth/providers/github'
 
 const handler = NextAuth({
@@ -6,13 +11,18 @@ const handler = NextAuth({
 	session: {
 		strategy: 'jwt',
 	},
+	pages: {
+		signIn: '/login',
+	},
 	callbacks: {
+		signIn: async ({ user, account, profile, email, credentials }) => {
+			console.log('signIn', user)
+			return Promise.resolve(true)
+		},
 		session: async ({ session, token, newSession, user }) => {
-			console.log('session', session)
 			return Promise.resolve(session)
 		},
 		jwt: async ({ token, user, account, profile }) => {
-			console.log('jwt', token)
 			return Promise.resolve(token)
 		},
 	},
@@ -20,6 +30,37 @@ const handler = NextAuth({
 		GithubProvider({
 			clientId: process.env.GITHUB_ID!,
 			clientSecret: process.env.GITHUB_SECRET!,
+		}),
+		CredentialsProvider({
+			credentials: {
+				email: {},
+				password: {},
+			},
+			authorize: async (credentials) => {
+				await startDb()
+				const existingUser = await UserModal.findOne({
+					email: credentials?.email,
+				})
+				console.log('authorize', credentials, existingUser)
+				if (!existingUser) {
+					return Promise.reject(new Error('No User Found'))
+				}
+
+				const passwordTest = await existingUser.comparePassword(
+					credentials?.password!
+				)
+				if (!passwordTest) {
+					return Promise.reject(new Error('Invalid Password'))
+				}
+
+				return {
+					id: existingUser._id.toString(),
+					email: existingUser.email,
+					name: existingUser.name,
+					image: existingUser.image,
+					role: existingUser.role,
+				}
+			},
 		}),
 		// ...add more providers here
 	],
