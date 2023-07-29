@@ -15,11 +15,8 @@ const handler = NextAuth({
 		signIn: '/login',
 	},
 	callbacks: {
-		signIn: async ({ user, account, profile, email, credentials }) => {
-			console.log('signIn', user)
-			return Promise.resolve(true)
-		},
 		session: async ({ session, token, newSession, user }) => {
+			console.log(user)
 			return Promise.resolve(session)
 		},
 		jwt: async ({ token, user, account, profile }) => {

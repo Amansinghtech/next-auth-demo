@@ -5,6 +5,7 @@ import Image from 'next/image'
 
 function Header() {
 	const { data: session, status } = useSession()
+	console.log(session)
 	return (
 		<div className="flex flex-row justify-between bg-neutral-900 p-4 items-center">
 			<h1>Next Auth Demo </h1>
